@@ -10,6 +10,9 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    ownType: {
+        type: Boolean
+    }
 }, { timestamps: true })
 
 const Message = mongoose.model('Message', messageSchema)

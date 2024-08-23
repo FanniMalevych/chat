@@ -11,13 +11,29 @@ export const sendMessage = async (req, res) => {
 		const newMessage = new Message({
 			conversationId,
 			message,
+            ownType: true
 		});
+            
+
+        const response = await fetch('https://dummyjson.com/quotes/random');
+        const {quote} = await response.json();
+        console.log(quote);
+        
+
+
+        const autoReply = new Message({
+            conversationId,
+            message: quote,
+            ownType: false
+        })
+        
 
 		if (newMessage) { 
 			conversation.messages.push(newMessage._id);
+            conversation.messages.push(autoReply._id);
 		}
 
-		await Promise.all([conversation.save(), newMessage.save()]);
+		await Promise.all([conversation.save(), newMessage.save(), autoReply.save()]);
 
 		// // SOCKET IO FUNCTIONALITY WILL GO HERE
 		// const receiverSocketId = getReceiverSocketId(receiverId);
