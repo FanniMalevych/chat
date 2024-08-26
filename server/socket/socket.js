@@ -1,6 +1,6 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
-import express from 'express'
+import express, { response } from 'express'
 import Message from "../models/message.model.js";
 
 
@@ -16,36 +16,42 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     console.log('socket connected');
 
-    // Message.find().exec((err, messages) => {
-    //       if (err) return console.error(err);
-    //       socket.emit('init', messages);
-    // })
+    Message.find().then((messages) => {
+        socket.emit('init', messages);
+    });
 
-    // Get the last 10 messages from the database.
-    // Message.find().exec((err, messages) => {
-    //   if (err) return console.error(err);
-  
-    //   // Send the last messages to the user.
-    //   socket.emit('init', messages);
-    // });
-  
-    // // Listen to connected users for a new message.
-    // socket.on('message', (msg) => {
-    //     console.log('inside socket');
-        
-    //   // Create a message with the content and the name of the user.
-    //   const message = new Message({
-    //     message: msg.message,
-    //   });
-  
-    //   // Save the message to the database.
-    //   message.save((err) => {
-    //     if (err) return console.error(err);
-    //   });
-  
-    //   // Notify all other users about a new message.
-    //   socket.broadcast.emit('push', msg);
-    // });
+    socket.on('message', ({ conversationId, message, reply }) => {
+      try {
+        const newMessage = new Message({
+          conversationId,
+          message,
+          ownType: true
+        });
+
+        const autoReply = new Message({
+            conversationId,
+            message: reply,
+            ownType: false
+        })
+          
+        setTimeout(() => {
+          autoReply.save().then(() => {
+            io.emit('message', autoReply); 
+          });
+        }, 3000)
+
+        newMessage.save().then(() => {
+          io.emit('message', newMessage); 
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+
+    socket.on('disconnect', () => {
+      console.log('A user disconnected');
+    });
   });
   
 

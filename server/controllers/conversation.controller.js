@@ -39,11 +39,8 @@ export const createConversation = async (req, res) => {
 
 export const updateConversation = async (req, res) => {
     try {
-        const { id: conversationId } = req.params
-        
-        
+        const { id: conversationId } = req.params      
         const { firstName, lastName } = req.body;
-        console.log(conversationId, firstName, lastName);
         
         let conversation = await Conversation.findOne({ _id: conversationId})
         if (conversation) {
@@ -74,7 +71,7 @@ export const deleteConversation = async (req, res) => {
             res.status(404).json({error: 'Conversation not found'})
         }
 
-    } catch {
+    } catch (err) {
         console.log(' Error in conversation controller', err.message);
         res.status(500).json({error: 'Error during deleting conversation'})
     }
