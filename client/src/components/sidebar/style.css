@@ -50,10 +50,7 @@
     border-radius: 15px;
     text-align: center;
    }
-   
-   .modalText {
-    text-align: justify;
-   }
+
    .modal-button button {
     border: 1px solid lightblue;
     padding: 6px;
@@ -62,6 +59,7 @@
     background-color:lightblue;
     color: white;
     border-radius: 7px;
+    cursor: pointer;
    }
 
    .conversation-form {

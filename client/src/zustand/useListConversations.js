@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 const useListConversations = create((set) => ({
 	conversations: [],
-    addConversation: (conversation) => set((state) => ({ conversations: [...state.conversations, conversation]})),
+    addConversation: (conversation) => set((state) => ({ conversations: [...state.conversations, conversation], filteredConversations: [...state.conversations, conversation]})),
 	setConversations:  (conversations) => set({ conversations }),
     deleteConversation: (conversationId) => set((state) => {
         const conversations = state.conversations.filter((conversation) => conversation._id !== conversationId);

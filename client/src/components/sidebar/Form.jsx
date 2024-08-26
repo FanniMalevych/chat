@@ -21,6 +21,8 @@ const Form = ({ edit = false, id = null, firstN = '', lastN = ''}) => {
             axios.put(`/api/conversations/${id}`, {firstName: name, lastName})
             updateConversation({_id: id, firstName: name, lastName})
         } else {
+            console.log('inside add');
+            
             axios.post('/api/conversations', {firstName: name, lastName})
             addConversation({firstName: name, lastName})
         }
@@ -53,8 +55,8 @@ const Form = ({ edit = false, id = null, firstN = '', lastN = ''}) => {
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}/>
                     <div className="modal-button">
-                        <button type="submit" className="toggle-button" >Ok</button>
-                        <button type='reset' className="toggle-button" onClick={() => setIsVisible(false)}>Close</button>
+                        <button type="submit" >Ok</button>
+                        <button type='reset'  onClick={() => setIsVisible(false)}>Close</button>
                     </div>          
                 </form>        
             </div>
