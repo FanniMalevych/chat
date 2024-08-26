@@ -1,16 +1,12 @@
+import './style.css'
 
-
-const Message  = ({ownType, message}) =>  {
-   
+const Message  = ({ ownType, message }) =>  {
     return (
-        <>
         <div className={!ownType ? "person-a": "person-b"}>
-    
-    <div className="message">
-   {message}
-    </div>
-  </div>
-</>
+            <div className="message">
+                {message}
+            </div>
+        </div>
     )
 }
 

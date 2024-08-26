@@ -1,56 +1,64 @@
-import { useEffect, useContext, useState } from "react";
-import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
-import { conversationContext } from "../../App";
+import toast from "react-hot-toast";
+import NoChatSelected from "./NoChatSelected";
+import useConversation from "../../zustand/useConversation";
 
 
 const MessagesContainer = () => {
-const [conv, setConv] = useContext(conversationContext); 
-const [messages, setMessages] = useState([])
+const lastMessageRef = useRef();
+const { selectedConversation, messages, setMessages } = useConversation()
+const [newMsg, setNewMsg] = useState('')
 
-// const socket = io('http://localhost:8000')
-//     // Load the last 10 messages in the window.
-//     useEffect(() => {
-//         socket.on('init', (msg) => {
-//             let msgReversed = msg.reverse();
-//             console.log(msgReversed);
-            
-//           });
-//     }, [])
-    
+useEffect(() => {
+    setTimeout(() => {
+        lastMessageRef.current?.lastElementChild?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+}, [messages]);
 
-//     socket.on('push', (msg) => {
-//         setMessages(...messages, msg)
-//       });
+const socket = io('http://localhost:8000')
+useEffect (() => {
+    socket.on('message', (msg) => {  
+        setNewMsg(msg)
+    })
+}, [])
 
-    // [msg, setMsg] = useState('')
-    useEffect(() => {
-        if(conv) {
-            axios.get(`/api/messages/${conv}`).then((resp) => {
-                console.log(resp.data);
-                setMessages(resp.data)
-                console.log(conv);
-                
-               })
-        }
-        // const fetchMessages = async () => {
-        //     const resp = await fetch(`/api/messages/${conv}`)
-        //     const {data} = await resp.json()
-        //     console.log(data);
-            
-        // }
-        // fetchMessages()
-        
+useEffect(() => {
+    if(newMsg.message && !newMsg.ownType){
+        toast(  `${newMsg.message}`, {
+            icon: '💬',
+          });
+    }
+}, [newMsg])
 
-    },[conv])
 
+useEffect(() => {
+    if(selectedConversation) {
+        socket.on('init', (msg) => {
+            const msgCur = msg.filter((el) => el.conversationId === selectedConversation)
+            setMessages(msgCur)  
+        });
+    }
+}, [selectedConversation, newMsg])
     
     return (
-        <div className="box">
-            {messages.map(el => <Message key={el._id} ownType={el.ownType} message={el.message}/>)}
-            <MessageInput/>
+        <div className="message-container">
+            { selectedConversation ? (
+                <>
+                    <div className="messages" ref={lastMessageRef}>
+                    { messages.length ? 
+                        messages.map(el => <Message key={el._id} ownType={el.ownType} message={el.message} />)
+                    :
+                        <p className="start-conversation">start conversation here</p>}
+                        </div>
+                    <MessageInput/>
+                </>
+            ) :
+            <NoChatSelected />
+        }
+            
         </div>
     )
 }

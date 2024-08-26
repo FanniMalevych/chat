@@ -1,25 +1,21 @@
-import { useState, createContext } from 'react'
+import { Toaster } from "react-hot-toast";
 
 import './App.css'
 import MessagesContainer from './components/messages/MessagesContainer'
 import SideBar from './components/sidebar/SideBar'
 
-export const conversationContext = createContext();
 
 function App() {
-  const [conv, setConv] = useState('')
 
   return (
-    <conversationContext.Provider value={[conv, setConv]}>
-
-     <h2>Type smth and have fun</h2>
-
-      <div className="card">
+    <>
+      <h2 className="title">Type something and have fun</h2>
+      <div className="container">
         <SideBar />
-       <MessagesContainer />
+        <MessagesContainer />
       </div>
-      
-      </conversationContext.Provider>
+      <Toaster />
+    </>
   )
 }
 

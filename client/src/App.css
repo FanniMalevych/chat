@@ -3,46 +3,18 @@
 }
 body{
   margin:0;
-  font:.9em/1.5 'Roboto';
+  font-family: "Poppins", sans-serif;
   cursor:default;
 }
-.box{
-  width:80%;
-  max-width:400px;
-  margin:2em auto;
-}
-.message{
-  width:calc(100% - 100px);
-  border-radius:15px;
-  padding:1em;
-}
-.person-a .message{
-  background:#f8f8f8;
-}
-.person-a{
-  display:flex;
-  align-items:flex-end;
-}
-.person-b .message{
-  background:lightblue;
-  margin:2em 0;
-  margin-left:100px;
-  color:white;
-  text-align:right;
-}
-.message svg{
-  height:26px;
-  vertical-align:middle;
-}
-.last{
-  width:auto;
+
+.title {
+  text-align: center;
 }
 
-.card{
+.container {
   display: flex;
-  
-}
-
-.side-bar {
-  margin: 75px;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
 }

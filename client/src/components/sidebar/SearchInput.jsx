@@ -1,25 +1,38 @@
-import { useState } from 'react'
-
 import './style.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import useListConversations from '../../zustand/useListConversations'
 
 const SearchInput = () => {
-    const [inputValue, setInputValue] = useState('');
+  const {conversations , setFilteredConversations} = useListConversations()
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  const handleSubmit = (e) => e.preventDefault()
   
-  
+  const handleSearch = (e) => {
+    if(!e.target.value) return setFilteredConversations(conversations)
+
+    const filteredConversations = conversations.filter(conversation => {    
+      return conversation.firstName.toLowerCase().includes(e.target.value.toLowerCase() ||
+      conversation.lastName.toLowerCase().includes(e.target.value.toLowerCase()) )
+    })
+    setFilteredConversations(filteredConversations)
+  }
+
     return (
         <>
-        
-
-        <div className="search-box">
-        <button className="btn-search"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-        <input type="text" className="input-search"  value={inputValue} placeholder="Type to Search..." onChange={handleInputChange}></input>
-      </div>
+        <form onSubmit={handleSubmit}>
+          <div className='input-msg-container'>
+            <input
+              type='text'
+              className='input-msg '
+              placeholder='Type to Search..'
+              onChange={handleSearch}
+            />
+            <button type='submit' className='btn-send-msg'>
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </button>
+          </div>
+		    </form>
       </>
     )
 }
