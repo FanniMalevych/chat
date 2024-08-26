@@ -8,7 +8,7 @@ import useConversation from "../../zustand/useConversation";
 
 const MessageInput = () => {
     const [message, setMessage] = useState("");
-	const socket = io('http://localhost:8000')
+	const socket = io('https://chat-nnpb.onrender.com')
 	const { selectedConversation } = useConversation()
 
     const handleSubmit = async (e) => {

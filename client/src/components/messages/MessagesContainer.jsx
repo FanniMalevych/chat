@@ -18,7 +18,7 @@ useEffect(() => {
     }, 100);
 }, [messages]);
 
-const socket = io('http://localhost:8000')
+const socket = io('https://chat-nnpb.onrender.com')
 useEffect (() => {
     socket.on('message', (msg) => {  
         setNewMsg(msg)
